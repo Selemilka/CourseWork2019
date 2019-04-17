@@ -15,5 +15,6 @@ namespace CourseWork2019.Models
         public DateTime CreationDate { get; set; }
 
         public ICollection<QuizQuestion> QuizQusetions { get; set; }
+        public ICollection<UserQuiz> UserQuizzes { get; set; }
     }
 }

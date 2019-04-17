@@ -20,6 +20,7 @@ namespace CourseWork2019.Data
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<QuizQuestion> QuizQuestions { get; set; }
         public DbSet<Rubric> Rubrics { get; set; }
+        public DbSet<CourseWork2019.Models.User> User { get; set; }
 
     }
 }
