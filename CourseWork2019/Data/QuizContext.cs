@@ -40,9 +40,9 @@ namespace CourseWork2019.Data
                 .HasKey(c => new { c.UserID, c.QuizID });
 
             modelBuilder.Entity<QuizQuestion>()
-            .HasOne(sc => sc.Quiz)
-            .WithMany(s => s.QuizQuestions)
-            .HasForeignKey(sc => sc.QuizID);
+                .HasOne(sc => sc.Quiz)
+                .WithMany(s => s.QuizQuestions)
+                .HasForeignKey(sc => sc.QuizID);
 
             modelBuilder.Entity<QuizQuestion>()
                 .HasOne(sc => sc.Question)
