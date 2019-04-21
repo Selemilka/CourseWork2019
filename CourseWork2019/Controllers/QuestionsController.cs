@@ -48,7 +48,7 @@ namespace CourseWork2019.Controllers
         // GET: Questions/Create
         public IActionResult Create()
         {
-            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricID");
+            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricName");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace CourseWork2019.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricID", question.RubricID);
+            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricName", question.RubricID);
             return View(question);
         }
 
@@ -82,7 +82,7 @@ namespace CourseWork2019.Controllers
             {
                 return NotFound();
             }
-            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricID", question.RubricID);
+            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricName", question.RubricID);
             return View(question);
         }
 
@@ -118,7 +118,7 @@ namespace CourseWork2019.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricID", question.RubricID);
+            ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricName", question.RubricID);
             return View(question);
         }
 

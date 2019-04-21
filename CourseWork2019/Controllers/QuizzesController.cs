@@ -26,8 +26,21 @@ namespace CourseWork2019.Controllers
         }
 
         // GET: Quizzes/Details/5
+
+        public class TaskModel
+        {
+            public Quiz Quiz { get; set; }
+            public List<Question> Questions { get; set; }
+
+            public TaskModel(Quiz quiz, List<Question> questions)
+            {
+                Quiz = quiz;
+                Questions = questions;
+            }
+        }
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -40,7 +53,9 @@ namespace CourseWork2019.Controllers
                 return NotFound();
             }
 
-            return View(quiz);
+            var questions = await _context.QuizQuestions.Where(s => s.QuizID == id).Select(sc => sc.Question).ToListAsync();
+        
+            return View(new TaskModel(quiz, questions));
         }
 
         // GET: Quizzes/Create
