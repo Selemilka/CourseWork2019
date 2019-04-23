@@ -15,7 +15,6 @@ namespace CourseWork2019.Data
         }
 
         public DbSet<Answer> Answers { get; set; }
-        public DbSet<CorrectAnswer> CorrectAnswers { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<QuizQuestion> QuizQuestions { get; set; }
@@ -26,7 +25,6 @@ namespace CourseWork2019.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Answer>().ToTable("Answers");
-            modelBuilder.Entity<CorrectAnswer>().ToTable("Enrollment");
             modelBuilder.Entity<Question>().ToTable("Questions");
             modelBuilder.Entity<Quiz>().ToTable("Quizzes");
             modelBuilder.Entity<QuizQuestion>().ToTable("QuizQuestions");

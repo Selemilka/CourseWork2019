@@ -10,9 +10,8 @@ namespace CourseWork2019.Models
     {
         public int AnswerID { get; set; }
         public string AnswerText { get; set; }
-        public string QuestionID { get; set; }
+        public int QuestionID { get; set; }
         
         public Question Question { get; set; }
-        public ICollection<CorrectAnswer> CorrectAnswers { get; set; }
     }
 }

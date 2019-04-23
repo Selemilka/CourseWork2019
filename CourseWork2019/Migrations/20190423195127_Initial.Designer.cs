@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseWork2019.Migrations
 {
     [DbContext(typeof(QuizContext))]
-    [Migration("20190417070858_Quiz")]
-    partial class Quiz
+    [Migration("20190423195127_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,34 +29,13 @@ namespace CourseWork2019.Migrations
 
                     b.Property<string>("AnswerText");
 
-                    b.Property<string>("QuestionID");
-
-                    b.Property<int?>("QuestionID1");
+                    b.Property<int>("QuestionID");
 
                     b.HasKey("AnswerID");
 
-                    b.HasIndex("QuestionID1");
-
-                    b.ToTable("Answers");
-                });
-
-            modelBuilder.Entity("CourseWork2019.Models.CorrectAnswer", b =>
-                {
-                    b.Property<int>("CorrectAnswerID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AnswerID");
-
-                    b.Property<int>("QuestionID");
-
-                    b.HasKey("CorrectAnswerID");
-
-                    b.HasIndex("AnswerID");
-
                     b.HasIndex("QuestionID");
 
-                    b.ToTable("CorrectAnswers");
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("CourseWork2019.Models.Question", b =>
@@ -65,7 +44,9 @@ namespace CourseWork2019.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("QuestionName");
+                    b.Property<string>("QuestionName")
+                        .IsRequired()
+                        .HasMaxLength(500);
 
                     b.Property<string>("QuestionText");
 
@@ -86,7 +67,9 @@ namespace CourseWork2019.Migrations
 
                     b.Property<DateTime>("CreationDate");
 
-                    b.Property<string>("QuizName");
+                    b.Property<string>("QuizName")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.HasKey("QuizID");
 
@@ -95,19 +78,15 @@ namespace CourseWork2019.Migrations
 
             modelBuilder.Entity("CourseWork2019.Models.QuizQuestion", b =>
                 {
-                    b.Property<int>("QuizQuestionID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("QuizID");
 
                     b.Property<int>("QuestionID");
 
-                    b.Property<int>("QuizID");
+                    b.Property<int>("QuizQuestionID");
 
-                    b.HasKey("QuizQuestionID");
+                    b.HasKey("QuizID", "QuestionID");
 
                     b.HasIndex("QuestionID");
-
-                    b.HasIndex("QuizID");
 
                     b.ToTable("QuizQuestions");
                 });
@@ -118,7 +97,9 @@ namespace CourseWork2019.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("RubricName");
+                    b.Property<string>("RubricName")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("RubricID");
 
@@ -131,56 +112,50 @@ namespace CourseWork2019.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("EmailAddress");
+                    b.Property<string>("EmailAddress")
+                        .IsRequired();
 
-                    b.Property<string>("FirstMidName");
+                    b.Property<string>("FirstMidName")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(25);
 
                     b.HasKey("UserID");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CourseWork2019.Models.UserQuiz", b =>
                 {
-                    b.Property<int>("UserQuizID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("UserID");
 
                     b.Property<int>("QuizID");
 
-                    b.Property<int>("UserID");
+                    b.Property<int>("UserQuizID");
 
-                    b.HasKey("UserQuizID");
+                    b.HasKey("UserID", "QuizID");
 
                     b.HasIndex("QuizID");
 
-                    b.HasIndex("UserID");
-
-                    b.ToTable("UserQuiz");
+                    b.ToTable("UserQuizzes");
                 });
 
             modelBuilder.Entity("CourseWork2019.Models.Answer", b =>
                 {
-                    b.HasOne("CourseWork2019.Models.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionID1");
-                });
-
-            modelBuilder.Entity("CourseWork2019.Models.CorrectAnswer", b =>
-                {
-                    b.HasOne("CourseWork2019.Models.Answer", "Answer")
-                        .WithMany("CorrectAnswers")
-                        .HasForeignKey("AnswerID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("CourseWork2019.Models.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionID")
@@ -203,7 +178,7 @@ namespace CourseWork2019.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CourseWork2019.Models.Quiz", "Quiz")
-                        .WithMany("QuizQusetions")
+                        .WithMany("QuizQuestions")
                         .HasForeignKey("QuizID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

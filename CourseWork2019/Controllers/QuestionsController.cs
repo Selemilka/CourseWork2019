@@ -83,6 +83,7 @@ namespace CourseWork2019.Controllers
                 return NotFound();
             }
             ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricName", question.RubricID);
+            ViewData["QuestonID"] = id;
             return View(question);
         }
 
@@ -120,6 +121,27 @@ namespace CourseWork2019.Controllers
             }
             ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricName", question.RubricID);
             return View(question);
+        }
+
+        //GET: Questions/AddAnswer/5
+        public IActionResult AddAnswer(int? id)
+        {
+
+            return View();
+        }
+
+        //POST: Questions/AddAnswer/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAnswer([Bind("AnswerText,QuestionID")] Answer answer)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Answers.Add(answer);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(answer);
         }
 
         // GET: Questions/Delete/5

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CourseWork2019.Migrations
 {
-    public partial class Quiz : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace CourseWork2019.Migrations
                 {
                     QuizID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    QuizName = table.Column<string>(nullable: true),
+                    QuizName = table.Column<string>(maxLength: 200, nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -28,7 +28,7 @@ namespace CourseWork2019.Migrations
                 {
                     RubricID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RubricName = table.Column<string>(nullable: true)
+                    RubricName = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,21 +36,21 @@ namespace CourseWork2019.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     UserID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserName = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    FirstMidName = table.Column<string>(nullable: true),
-                    EmailAddress = table.Column<string>(nullable: true)
+                    UserName = table.Column<string>(maxLength: 25, nullable: false),
+                    Password = table.Column<string>(maxLength: 30, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    FirstMidName = table.Column<string>(maxLength: 50, nullable: true),
+                    EmailAddress = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.UserID);
+                    table.PrimaryKey("PK_Users", x => x.UserID);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,7 +59,7 @@ namespace CourseWork2019.Migrations
                 {
                     QuestionID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    QuestionName = table.Column<string>(nullable: true),
+                    QuestionName = table.Column<string>(maxLength: 500, nullable: false),
                     QuestionText = table.Column<string>(nullable: true),
                     RubricID = table.Column<int>(nullable: false)
                 },
@@ -75,27 +75,26 @@ namespace CourseWork2019.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserQuiz",
+                name: "UserQuizzes",
                 columns: table => new
                 {
-                    UserQuizID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserID = table.Column<int>(nullable: false),
-                    QuizID = table.Column<int>(nullable: false)
+                    QuizID = table.Column<int>(nullable: false),
+                    UserQuizID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserQuiz", x => x.UserQuizID);
+                    table.PrimaryKey("PK_UserQuizzes", x => new { x.UserID, x.QuizID });
                     table.ForeignKey(
-                        name: "FK_UserQuiz_Quizzes_QuizID",
+                        name: "FK_UserQuizzes_Quizzes_QuizID",
                         column: x => x.QuizID,
                         principalTable: "Quizzes",
                         principalColumn: "QuizID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserQuiz_User_UserID",
+                        name: "FK_UserQuizzes_Users_UserID",
                         column: x => x.UserID,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -107,32 +106,30 @@ namespace CourseWork2019.Migrations
                     AnswerID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AnswerText = table.Column<string>(nullable: true),
-                    QuestionID = table.Column<string>(nullable: true),
-                    QuestionID1 = table.Column<int>(nullable: true)
+                    QuestionID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Answers", x => x.AnswerID);
                     table.ForeignKey(
-                        name: "FK_Answers_Questions_QuestionID1",
-                        column: x => x.QuestionID1,
+                        name: "FK_Answers_Questions_QuestionID",
+                        column: x => x.QuestionID,
                         principalTable: "Questions",
                         principalColumn: "QuestionID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "QuizQuestions",
                 columns: table => new
                 {
-                    QuizQuestionID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     QuizID = table.Column<int>(nullable: false),
-                    QuestionID = table.Column<int>(nullable: false)
+                    QuestionID = table.Column<int>(nullable: false),
+                    QuizQuestionID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuizQuestions", x => x.QuizQuestionID);
+                    table.PrimaryKey("PK_QuizQuestions", x => new { x.QuizID, x.QuestionID });
                     table.ForeignKey(
                         name: "FK_QuizQuestions_Questions_QuestionID",
                         column: x => x.QuestionID,
@@ -147,45 +144,9 @@ namespace CourseWork2019.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CorrectAnswers",
-                columns: table => new
-                {
-                    CorrectAnswerID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AnswerID = table.Column<int>(nullable: false),
-                    QuestionID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CorrectAnswers", x => x.CorrectAnswerID);
-                    table.ForeignKey(
-                        name: "FK_CorrectAnswers_Answers_AnswerID",
-                        column: x => x.AnswerID,
-                        principalTable: "Answers",
-                        principalColumn: "AnswerID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CorrectAnswers_Questions_QuestionID",
-                        column: x => x.QuestionID,
-                        principalTable: "Questions",
-                        principalColumn: "QuestionID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_Answers_QuestionID1",
+                name: "IX_Answers_QuestionID",
                 table: "Answers",
-                column: "QuestionID1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CorrectAnswers_AnswerID",
-                table: "CorrectAnswers",
-                column: "AnswerID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CorrectAnswers_QuestionID",
-                table: "CorrectAnswers",
                 column: "QuestionID");
 
             migrationBuilder.CreateIndex(
@@ -199,43 +160,30 @@ namespace CourseWork2019.Migrations
                 column: "QuestionID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizQuestions_QuizID",
-                table: "QuizQuestions",
+                name: "IX_UserQuizzes_QuizID",
+                table: "UserQuizzes",
                 column: "QuizID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserQuiz_QuizID",
-                table: "UserQuiz",
-                column: "QuizID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserQuiz_UserID",
-                table: "UserQuiz",
-                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CorrectAnswers");
+                name: "Answers");
 
             migrationBuilder.DropTable(
                 name: "QuizQuestions");
 
             migrationBuilder.DropTable(
-                name: "UserQuiz");
+                name: "UserQuizzes");
 
             migrationBuilder.DropTable(
-                name: "Answers");
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");
 
             migrationBuilder.DropTable(
-                name: "User");
-
-            migrationBuilder.DropTable(
-                name: "Questions");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Rubrics");
