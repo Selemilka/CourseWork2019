@@ -11,8 +11,11 @@ namespace CourseWork2019.Models
         public int QuestionID { get; set; }
         [Required]
         [StringLength(500)]
+        [Display(Name = "Название вопроса")]
         public string QuestionName { get; set; }
+        [Display(Name = "Текст вопроса")]
         public string QuestionText { get; set; }
+        [Display(Name = "Рубрика (тема вопроса)")]
         public int RubricID { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }

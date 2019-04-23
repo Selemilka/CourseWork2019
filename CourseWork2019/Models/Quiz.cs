@@ -16,6 +16,7 @@ namespace CourseWork2019.Models
         public string QuizName { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Дата создания")]
         public DateTime CreationDate { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }

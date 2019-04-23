@@ -7,70 +7,65 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CourseWork2019.Data;
 using CourseWork2019.Models;
-using CourseWork2019.ViewModels;
 
 namespace CourseWork2019.Controllers
 {
-    public class QuizzesController : Controller
+    public class RubricsController : Controller
     {
         private readonly QuizContext _context;
 
-        public QuizzesController(QuizContext context)
+        public RubricsController(QuizContext context)
         {
             _context = context;
         }
 
-        // GET: Quizzes
+        // GET: Rubrics
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Quizzes.ToListAsync());
+            return View(await _context.Rubrics.ToListAsync());
         }
 
-        // GET: Quizzes/Details/5
-        
+        // GET: Rubrics/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var quiz = await _context.Quizzes
-                .FirstOrDefaultAsync(m => m.QuizID == id);
-            if (quiz == null)
+            var rubric = await _context.Rubrics
+                .FirstOrDefaultAsync(m => m.RubricID == id);
+            if (rubric == null)
             {
                 return NotFound();
             }
 
-            var questions = await _context.QuizQuestions.Where(s => s.QuizID == id).Select(sc => sc.Question).ToListAsync();
-        
-            return View(new TaskModel(quiz, questions));
+            return View(rubric);
         }
 
-        // GET: Quizzes/Create
+        // GET: Rubrics/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Quizzes/Create
+        // POST: Rubrics/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuizID,QuizName,CreationDate")] Quiz quiz)
+        public async Task<IActionResult> Create([Bind("RubricID,RubricName")] Rubric rubric)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(quiz);
+                _context.Add(rubric);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(quiz);
+            return View(rubric);
         }
 
-        // GET: Quizzes/Edit/5
+        // GET: Rubrics/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +73,22 @@ namespace CourseWork2019.Controllers
                 return NotFound();
             }
 
-            var quiz = await _context.Quizzes.FindAsync(id);
-            if (quiz == null)
+            var rubric = await _context.Rubrics.FindAsync(id);
+            if (rubric == null)
             {
                 return NotFound();
             }
-            return View(quiz);
+            return View(rubric);
         }
 
-        // POST: Quizzes/Edit/5
+        // POST: Rubrics/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("QuizID,QuizName,CreationDate")] Quiz quiz)
+        public async Task<IActionResult> Edit(int id, [Bind("RubricID,RubricName")] Rubric rubric)
         {
-            if (id != quiz.QuizID)
+            if (id != rubric.RubricID)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace CourseWork2019.Controllers
             {
                 try
                 {
-                    _context.Update(quiz);
+                    _context.Update(rubric);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!QuizExists(quiz.QuizID))
+                    if (!RubricExists(rubric.RubricID))
                     {
                         return NotFound();
                     }
@@ -118,10 +113,10 @@ namespace CourseWork2019.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(quiz);
+            return View(rubric);
         }
 
-        // GET: Quizzes/Delete/5
+        // GET: Rubrics/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,30 +124,30 @@ namespace CourseWork2019.Controllers
                 return NotFound();
             }
 
-            var quiz = await _context.Quizzes
-                .FirstOrDefaultAsync(m => m.QuizID == id);
-            if (quiz == null)
+            var rubric = await _context.Rubrics
+                .FirstOrDefaultAsync(m => m.RubricID == id);
+            if (rubric == null)
             {
                 return NotFound();
             }
 
-            return View(quiz);
+            return View(rubric);
         }
 
-        // POST: Quizzes/Delete/5
+        // POST: Rubrics/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var quiz = await _context.Quizzes.FindAsync(id);
-            _context.Quizzes.Remove(quiz);
+            var rubric = await _context.Rubrics.FindAsync(id);
+            _context.Rubrics.Remove(rubric);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool QuizExists(int id)
+        private bool RubricExists(int id)
         {
-            return _context.Quizzes.Any(e => e.QuizID == id);
+            return _context.Rubrics.Any(e => e.RubricID == id);
         }
     }
 }
