@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CourseWork2019.Data;
 using CourseWork2019.Models;
+using CourseWork2019.ViewModels;
 
 namespace CourseWork2019.Controllers
 {
@@ -42,7 +43,9 @@ namespace CourseWork2019.Controllers
                 return NotFound();
             }
 
-            return View(question);
+            var answers = await _context.Answers.Where(q => q.QuestionID == id).ToListAsync();
+
+            return View(new QuestionDetailsModel(question, answers));
         }
 
         // GET: Questions/Create
@@ -126,14 +129,14 @@ namespace CourseWork2019.Controllers
         //GET: Questions/AddAnswer/5
         public IActionResult AddAnswer(int? id)
         {
-
+            ViewBag.ID = id;
             return View();
         }
 
         //POST: Questions/AddAnswer/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddAnswer([Bind("AnswerText,QuestionID")] Answer answer)
+        public async Task<IActionResult> AddAnswer([Bind("AnswerText,IsCorrectAnswer,QuestionID")] Answer answer)
         {
             if (ModelState.IsValid)
             {

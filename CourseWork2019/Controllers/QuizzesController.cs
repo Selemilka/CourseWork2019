@@ -44,10 +44,8 @@ namespace CourseWork2019.Controllers
             }
 
             var questions = await _context.QuizQuestions.Where(s => s.QuizID == id).Select(sc => sc.Question).ToListAsync();
-
-            var newQuestions = _context.Quizzes.Where(s => s.QuizID == id).Include(s => s.QuizQuestions).ThenInclude(w => w.Question).ToList();
-
-            return View(new TaskModel(quiz, questions));
+            
+            return View(new QuizDetailsModel(quiz, questions));
         }
 
         // GET: Quizzes/Create

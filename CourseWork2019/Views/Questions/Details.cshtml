@@ -1,4 +1,4 @@
-﻿@model CourseWork2019.Models.Question
+﻿@model CourseWork2019.ViewModels.QuestionDetailsModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,27 +10,38 @@
     <h4>Question</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QuestionName)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Question.QuestionName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QuestionName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Question.QuestionName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QuestionText)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Question.QuestionText)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QuestionText)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Question.QuestionText)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rubric)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Question.Rubric)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rubric.RubricName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Question.Rubric.RubricName)
         </dd>
     </dl>
+    <h5>Answers:</h5>
+    <table>
+        @foreach (var i in Model.Answers)
+        {
+            <tr>
+                <td>@i.AnswerText</td>
+                <td>@i.IsCorrectAnswer</td>
+            </tr>
+        }
+    </table>
+    <hr />
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.QuestionID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Question.QuestionID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

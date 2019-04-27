@@ -18,9 +18,12 @@
                 <span asp-validation-for="AnswerText" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="QuestionID" class="control-label"></label>
-                <input asp-for="QuestionID" class="form-control"/>
-                <span asp-validation-for="QuestionID" class="text-danger"></span>
+                <label asp-for="IsCorrectAnswer" class="control-label"></label>
+                <input asp-for="IsCorrectAnswer" type="checkbox" />
+                <span asp-validation-for="IsCorrectAnswer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="QuestionID" class="form-control" value="@ViewBag.ID" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -12,6 +12,8 @@ namespace CourseWork2019.Models
         public string AnswerText { get; set; }
         public int QuestionID { get; set; }
         
+        public bool IsCorrectAnswer { get; set; }
+
         public Question Question { get; set; }
     }
 }

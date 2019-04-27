@@ -1,4 +1,4 @@
-﻿@model CourseWork2019.ViewModels.TaskModel
+﻿@model CourseWork2019.ViewModels.QuizDetailsModel
 @{
     ViewData["Title"] = "Details";
 }
@@ -9,33 +9,38 @@
     <h4>Quiz</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Quiz.QuizName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Quiz.QuizName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Quiz.CreationDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Quiz.CreationDate)
         </dd>
     </dl>
+
+    <h5>Questions: </h5>
+    <table class="table-striped">
+        <thead>
+            <tr>
+                <td><h6>Название вопроса    </h6></td>
+                <td><h6>Содержание вопроса</h6></td>
+            </tr>
+        </thead>
+        @foreach (var i in Model.Questions)
+        {
+            <tr>
+                <td>@i.QuestionName</td>
+                <td>@i.QuestionText</td>
+            </tr>
+        }
+    </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Quiz.QuizID">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
-<div>
-    <table>
-        @foreach(var i in Model.Questions)
-        {
-            <tr>
-                <td>
-                    @i.QuestionName
-                </td>
-            </tr>   
-        }
-    </table>
 </div>

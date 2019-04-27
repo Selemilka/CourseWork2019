@@ -6,15 +6,15 @@ using CourseWork2019.Models;
 
 namespace CourseWork2019.ViewModels
 {
-    public class TaskModel
+    public class QuizDetailsModel
     {
-        public Quiz Quiz { get; set; }
-        public List<Question> Questions { get; set; }
-
-        public TaskModel(Quiz quiz, List<Question> questions)
+        public QuizDetailsModel(Quiz quiz, List<Question> questions)
         {
             Quiz = quiz;
             Questions = questions;
         }
+
+        public Quiz Quiz { get; set; }
+        public List<Question> Questions { get; set; }
     }
 }
