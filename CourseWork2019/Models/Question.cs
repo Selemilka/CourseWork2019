@@ -19,6 +19,7 @@ namespace CourseWork2019.Models
         public int RubricID { get; set; }
 
         public ICollection<QuizQuestion> QuizQuestions { get; set; }
+        public ICollection<Answer> Answers { get; set; }
         public Rubric Rubric { get; set; }
     }
 }

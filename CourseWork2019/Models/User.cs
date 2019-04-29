@@ -34,6 +34,15 @@ namespace CourseWork2019.Models
         [Display(Name = "Адрес электронной почты")]
         public string EmailAddress { get; set; }
 
+        public UserStatus Status { get; set; }
+
         public IEnumerable<UserQuiz> UserQuizzes { get; set; }
+    }
+
+    public enum UserStatus
+    {
+        Submitted,
+        Approved,
+        Rejected
     }
 }

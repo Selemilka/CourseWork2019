@@ -1,0 +1,27 @@
+﻿@model CourseWork2019.ViewModels.QuizDetailsModel
+
+@{
+    ViewData["Title"] = "Pass";
+}
+
+<h1>Pass</h1>
+
+<div>
+    <hr />
+    @foreach (var i in Model.Questions)
+    {
+        <h3>@i.QuestionName</h3>
+        <p>@i.QuestionText</p>
+        <ul>
+            @foreach (var j in i.Answers)
+            {
+                <li>
+                    <input type="checkbox" asp-for="@j.IsCorrectAnswer" />
+                    <label asp-for="@j.IsCorrectAnswer">@j.AnswerText</label>
+                    <input type="hidden" asp-for="@j.AnswerID" />
+                </li>
+            }
+        </ul>
+    }
+    <button type="submit" name="action" class="btn btn-primary">Завершить тест!</button>
+</div>

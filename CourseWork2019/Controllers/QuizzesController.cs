@@ -44,8 +44,29 @@ namespace CourseWork2019.Controllers
             }
 
             var questions = await _context.QuizQuestions.Where(s => s.QuizID == id).Select(sc => sc.Question).ToListAsync();
-            
+
             return View(new QuizDetailsModel(quiz, questions));
+        }
+
+        //GET: Quizzes/AddQuestion/5
+        public IActionResult AddQuestion(int? id)
+        {
+            ViewBag.ID = id;
+            return View();
+        }
+
+        //POST: Quizzes/AddQuestion/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddQuestion([Bind("QuizID,QuestionID")] QuizQuestion quizQuestion)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.QuizQuestions.Add(quizQuestion);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(quizQuestion);
         }
 
         // GET: Quizzes/Create
@@ -150,9 +171,30 @@ namespace CourseWork2019.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Pass(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var quiz = await _context.Quizzes.FirstOrDefaultAsync(m => m.QuizID == id);
+
+            var questions = await _context.QuizQuestions
+                                    .Where(q => q.QuizID == id)
+                                    .Select(m => m.Question)
+                                        .Include(w => w.Answers)
+                                    .ToListAsync();
+
+            questions.ForEach(w => w.Answers.ToList().ForEach(r => r.IsCorrectAnswer = false));
+
+            return View(new QuizDetailsModel(quiz, questions));
+        }
+
         private bool QuizExists(int id)
         {
             return _context.Quizzes.Any(e => e.QuizID == id);
         }
+
     }
 }
