@@ -18,11 +18,11 @@ namespace CourseWork2019.Models
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
-        [Required]
+
         [StringLength(50)]
         [Display(Name = "Имя")]
         public string FirstName { get; set; }
-        [Required]
+
         [StringLength(50)]
         [Display(Name = "Фамилия")]
         public string LastName { get; set; }
