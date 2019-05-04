@@ -11,13 +11,18 @@ namespace CourseWork2019.Controllers
 {
     public class HomeController : Controller
     {
-        [Authorize]
+        [Authorize(Roles = "admin, user")]
         public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Denied()
         {
             return View();
         }

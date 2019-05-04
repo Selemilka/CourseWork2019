@@ -21,6 +21,7 @@ namespace CourseWork2019.Data
         public DbSet<Rubric> Rubrics { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserQuiz> UserQuizzes { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,7 @@ namespace CourseWork2019.Data
             modelBuilder.Entity<Rubric>().ToTable("Rubrics");
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<UserQuiz>().ToTable("UserQuizzes");
+            modelBuilder.Entity<Role>().ToTable("Roles");
 
             modelBuilder.Entity<QuizQuestion>()
                 .HasKey(c => new { c.QuizID, c.QuestionID });

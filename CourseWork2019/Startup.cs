@@ -42,6 +42,7 @@ namespace CourseWork2019
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Home/Denied");
                 });
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

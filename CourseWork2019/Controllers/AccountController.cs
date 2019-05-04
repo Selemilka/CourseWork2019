@@ -38,13 +38,13 @@ namespace CourseWork2019.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.EmailAddress == model.Login && u.Password == model.Password);
+                User user = await _context.Users.Include(w => w.Role).FirstOrDefaultAsync(u => u.EmailAddress == model.Login && u.Password == model.Password);
                 if (user == null)
-                    user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == model.Login && u.Password == model.Password);
+                    user = await _context.Users.Include(w => w.Role).FirstOrDefaultAsync(u => u.UserName == model.Login && u.Password == model.Password);
 
                 if (user != null)
                 {
-                    await Authenticate(user.EmailAddress); // аутентификация
+                    await Authenticate(user); // аутентификация
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -65,28 +65,31 @@ namespace CourseWork2019.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.EmailAddress == model.EmailAddress);
+                User user = await _context.Users.Include(w => w.Role).FirstOrDefaultAsync(u => u.EmailAddress == model.EmailAddress);
                 if (user != null)
                 {
                     ModelState.AddModelError("", "Пользователь с таким e-mail уже существует!");
                     return View(model);
                 }
-                user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == model.UserName);
+                user = await _context.Users.Include(w => w.Role).FirstOrDefaultAsync(u => u.UserName == model.UserName);
                 if (user != null)
                 {
                     ModelState.AddModelError("", "Пользователь с таким логином уже существует!");
                     return View(model);
                 }
                 // добавляем пользователя в бд
-                _context.Users.Add(new User
+                user = new User
                 {
                     EmailAddress = model.EmailAddress,
                     Password = model.Password,
-                    UserName = model.UserName
-                });
+                    UserName = model.UserName,
+                    Role = await _context.Roles.FirstOrDefaultAsync(u => u.Name == "user")
+                };
+
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                await Authenticate(model.EmailAddress); // аутентификация
+                await Authenticate(user); // аутентификация
 
                 return RedirectToAction("Index", "Home");
             }
@@ -98,12 +101,13 @@ namespace CourseWork2019.Controllers
         }
 
 
-        private async Task Authenticate(string emailAddress)
+        private async Task Authenticate(User user)
         {
             // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, emailAddress)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

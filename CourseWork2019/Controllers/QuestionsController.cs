@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CourseWork2019.Data;
 using CourseWork2019.Models;
 using CourseWork2019.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseWork2019.Controllers
 {
@@ -49,6 +50,7 @@ namespace CourseWork2019.Controllers
         }
 
         // GET: Questions/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             ViewData["RubricID"] = new SelectList(_context.Rubrics, "RubricID", "RubricName");
@@ -60,6 +62,7 @@ namespace CourseWork2019.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("QuestionID,QuestionName,QuestionText,RubricID")] Question question)
         {
             if (ModelState.IsValid)
