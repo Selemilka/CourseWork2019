@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CourseWork2019.Data;
 using CourseWork2019.Models;
 using CourseWork2019.ViewModels;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace CourseWork2019.Controllers
 {
@@ -27,7 +30,7 @@ namespace CourseWork2019.Controllers
         }
 
         // GET: Quizzes/Details/5
-        
+
         public async Task<IActionResult> Details(int? id)
         {
 
@@ -184,11 +187,56 @@ namespace CourseWork2019.Controllers
                                     .Where(q => q.QuizID == id)
                                     .Select(m => m.Question)
                                         .Include(w => w.Answers)
+                                    .OrderBy(w => w.QuestionID)
                                     .ToListAsync();
 
             questions.ForEach(w => w.Answers.ToList().ForEach(r => r.IsCorrectAnswer = false));
 
             return View(new QuizDetailsModel(quiz, questions));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Pass(int id, List<Answer> answers)
+        {
+            List<Question> correctQuestions = await _context.QuizQuestions
+                                                        .Where(w => w.QuizID == id)
+                                                        .Select(w => w.Question)
+                                                            .Include(w => w.Answers)
+                                                        .OrderBy(w => w.QuestionID)
+                                                        .ToListAsync();
+            
+
+            int total = correctQuestions.Count();
+            int correct = total;
+
+            foreach (var i in correctQuestions)
+            {
+                foreach (var j in i.Answers)
+                {
+                    bool checkCorrectAnswer = answers.FirstOrDefault(w => w.AnswerID == j.AnswerID).IsCorrectAnswer;
+                    if (j.IsCorrectAnswer != checkCorrectAnswer)
+                    {
+                        --correct;
+                        break;
+                    }
+                }
+            }
+
+            User user = await _context.Users.FirstOrDefaultAsync(w => w.UserName == HttpContext.User.Identity.Name);
+            Counter counter = new Counter
+            {
+                Message = $"pass: {correct} {total}",
+                User = user,
+                UserID = user.UserID
+            };
+            _context.Counters.Add(counter);
+            await _context.SaveChangesAsync();
+
+            ViewBag.TotalQuestions = total;
+            ViewBag.CorrectQuestions = correct;
+
+            return View("Result", new ResultModel() { TotalQuestions = total, CorrectQuestions = correct });
         }
 
         private bool QuizExists(int id)

@@ -12,6 +12,8 @@
     <Compile Remove="Migrations\20190423192640_Initial.Designer.cs" />
     <Compile Remove="Migrations\20190423194926_Initial.cs" />
     <Compile Remove="Migrations\20190423194926_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190504091809_Counter.cs" />
+    <Compile Remove="Migrations\20190504091809_Counter.Designer.cs" />
   </ItemGroup>
 
 
