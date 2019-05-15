@@ -30,7 +30,6 @@ namespace CourseWork2019.Controllers
         }
 
         // GET: Quizzes/Details/5
-
         public async Task<IActionResult> Details(int? id)
         {
 
@@ -79,8 +78,6 @@ namespace CourseWork2019.Controllers
         }
 
         // POST: Quizzes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("QuizID,QuizName,CreationDate")] Quiz quiz)
@@ -92,6 +89,59 @@ namespace CourseWork2019.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(quiz);
+        }
+
+        // GET: Quizzes/PassRubric
+        public async Task<IActionResult> PassRubric(int? id)
+        {
+            List<Question> questions = await _context.Questions
+                                            .Where(w => w.RubricID == id)
+                                                    .Include(w => w.Rubric)
+                                                    .Include(w => w.Answers)
+                                            .ToListAsync();
+
+            questions.ForEach(w => w.Answers?.ToList().ForEach(r => r.IsCorrectAnswer = false));
+
+            return View(new QuizDetailsModel(new Quiz(), questions));
+        }
+
+        // POST: Quizzes/PassRubric
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PassRubric(int? id, List<Answer> answers)
+        {
+            List<Question> questions = await _context.Questions
+                                                       .Where(w => w.RubricID == id)
+                                                           .Include(w => w.Answers)
+                                                       .ToListAsync();
+            int total = questions.Count();
+            int correct = total;
+            foreach (var i in questions)
+            {
+                foreach (var j in i.Answers)
+                {
+                    if (j.IsCorrectAnswer != answers.FirstOrDefault(w => w.AnswerID == j.AnswerID).IsCorrectAnswer)
+                    {
+                        --correct;
+                        break;
+                    }
+                }
+            }
+
+            User user = await _context.Users.FirstOrDefaultAsync(w => w.UserName == HttpContext.User.Identity.Name);
+            Counter counter = new Counter
+            {
+                Message = $"pass: {correct} {total}",
+                User = user,
+                UserID = user.UserID
+            };
+            _context.Counters.Add(counter);
+            await _context.SaveChangesAsync();
+
+            ViewBag.TotalQuestions = total;
+            ViewBag.CorrectQuestions = correct;
+
+            return View("Result", new ResultModel() { TotalQuestions = total, CorrectQuestions = correct });
         }
 
         // GET: Quizzes/Edit/5
@@ -111,8 +161,6 @@ namespace CourseWork2019.Controllers
         }
 
         // POST: Quizzes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("QuizID,QuizName,CreationDate")] Quiz quiz)
@@ -189,8 +237,8 @@ namespace CourseWork2019.Controllers
                                         .Include(w => w.Answers)
                                     .OrderBy(w => w.QuestionID)
                                     .ToListAsync();
-
-            questions.ForEach(w => w.Answers.ToList().ForEach(r => r.IsCorrectAnswer = false));
+            
+            questions.ForEach(w => w.Answers?.ToList().ForEach(r => r.IsCorrectAnswer = false));
 
             return View(new QuizDetailsModel(quiz, questions));
         }
@@ -206,7 +254,6 @@ namespace CourseWork2019.Controllers
                                                         .OrderBy(w => w.QuestionID)
                                                         .ToListAsync();
             
-
             int total = correctQuestions.Count();
             int correct = total;
 

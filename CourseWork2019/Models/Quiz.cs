@@ -9,6 +9,7 @@ namespace CourseWork2019.Models
 {
     public class Quiz
     {
+        [Display(Name = "ID викторины")]
         public int QuizID { get; set; }
         [Required]
         [StringLength(200)]

@@ -25,6 +25,7 @@
                 @Html.DisplayFor(modelItem => item.RubricName)
             </td>
             <td>
+                <a asp-controller="Quizzes" asp-action="PassRubric" asp-route-id="@item.RubricID">Pass</a> |
                 <a asp-action="Edit" asp-route-id="@item.RubricID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.RubricID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.RubricID">Delete</a>

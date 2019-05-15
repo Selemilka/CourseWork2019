@@ -1,0 +1,33 @@
+﻿@model CourseWork2019.ViewModels.QuizDetailsModel
+
+@{
+    ViewData["Title"] = "PassRubric";
+    List<Answer> answers = new List<Answer>();
+}
+
+<h1>PassRubric</h1>
+
+<div>
+    <hr />
+    <form asp-action="PassRubric">
+        <div class="form-group">
+            @foreach (var i in Model.Questions)
+            {
+                <h3>@i.QuestionName</h3>
+                <p>@i.QuestionText</p>
+                <ul>
+                    @foreach (var j in i.Answers)
+                    {
+                        answers.Add(j);
+                        <li>
+                            <input type="checkbox" asp-for="@answers[answers.Count() - 1].IsCorrectAnswer" />
+                            <label asp-for="@answers[answers.Count() - 1]">@answers[answers.Count() - 1].AnswerText</label>
+                            <input type="hidden" asp-for="@answers[answers.Count() - 1].AnswerID" />
+                        </li>
+                    }
+                </ul>
+            }
+            <button type="submit" name="action" class="btn btn-primary">Завершить тест!</button>
+        </div>
+    </form>
+</div>
