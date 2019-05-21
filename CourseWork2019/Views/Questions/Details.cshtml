@@ -1,13 +1,13 @@
 ﻿@model CourseWork2019.ViewModels.QuestionDetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробнее о вопросе";
 }
 
-<h1>Details</h1>
+<h1>Подробнее о вопросе</h1>
 
 <div>
-    <h4>Question</h4>
+    <h4>Вопрос</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -29,7 +29,7 @@
             @Html.DisplayFor(model => model.Question.Rubric.RubricName)
         </dd>
     </dl>
-    <h5>Answers:</h5>
+    <h5>Ответы:</h5>
     <table>
         @foreach (var i in Model.Answers)
         {
@@ -42,6 +42,6 @@
     <hr />
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Question.QuestionID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Question.QuestionID">Вернуться к редактированию</a> |
+    <a asp-action="Index">Вернуться к списку</a>
 </div>

@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CourseWork2019.Controllers
 {
+
+    [Authorize(Roles = "admin")]
     public class QuestionsController : Controller
     {
         private readonly QuizContext _context;

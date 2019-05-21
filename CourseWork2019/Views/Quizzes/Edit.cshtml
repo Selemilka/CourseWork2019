@@ -1,12 +1,12 @@
 ﻿@model CourseWork2019.Models.Quiz
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактировать викторину";
 }
 
-<h1>Edit</h1>
+<h1>Редактировать викторину</h1>
 
-<h4>Quiz</h4>
+<h4>Викторина: </h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,11 +17,6 @@
                 <label asp-for="QuizName" class="control-label"></label>
                 <input asp-for="QuizName" class="form-control" />
                 <span asp-validation-for="QuizName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <a asp-action="AddQuestion" asp-route-id="@Model.QuizID">Добавить вопрос</a>
@@ -35,7 +30,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернуться к списку викторин</a>
 </div>
 
 @section Scripts {

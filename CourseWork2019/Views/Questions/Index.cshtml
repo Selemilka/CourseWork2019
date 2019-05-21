@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<CourseWork2019.Models.Question>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Вопросы";
 }
 
-<h1>Index</h1>
+<h1>Список вопросов</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать новый</a>
 </p>
 <table class="table">
     <thead>
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Rubric.RubricName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.QuestionID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.QuestionID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.QuestionID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.QuestionID">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.QuestionID">Подробнее</a> |
+                <a asp-action="Delete" asp-route-id="@item.QuestionID">Удалить</a>
             </td>
         </tr>
 }

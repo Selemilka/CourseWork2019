@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<CourseWork2019.Models.Rubric>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Список рубрик";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Список рубрик</h1>
+@if (User.IsInRole("admin"))
+{
+    <p>
+        <a asp-action="Create">Создать новую рубрику</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -19,18 +21,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RubricName)
-            </td>
-            <td>
-                <a asp-controller="Quizzes" asp-action="PassRubric" asp-route-id="@item.RubricID">Pass</a> |
-                <a asp-action="Edit" asp-route-id="@item.RubricID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RubricID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RubricID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RubricName)
+                </td>
+                <td>
+                    <a asp-controller="Quizzes" asp-action="PassRubric" asp-route-id="@item.RubricID">Пройти рубрику</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <span>
+                            | <a asp-action="Edit" asp-route-id="@item.RubricID">Редактировать</a> |
+                            <a asp-action="Details" asp-route-id="@item.RubricID">Удалить</a> |
+                            <a asp-action="Delete" asp-route-id="@item.RubricID">Подробнее</a>
+                        </span>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

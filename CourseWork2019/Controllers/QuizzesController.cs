@@ -62,6 +62,7 @@ namespace CourseWork2019.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddQuestion([Bind("QuizID,QuestionID")] QuizQuestion quizQuestion)
         {
+            if (await _context.Questions.FirstOrDefaultAsync(w => w.QuestionID == quizQuestion.QuestionID) != null)
             if (ModelState.IsValid)
             {
                 _context.QuizQuestions.Add(quizQuestion);
@@ -80,8 +81,9 @@ namespace CourseWork2019.Controllers
         // POST: Quizzes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuizID,QuizName,CreationDate")] Quiz quiz)
+        public async Task<IActionResult> Create([Bind("QuizID,QuizName")] Quiz quiz)
         {
+            quiz.CreationDate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 _context.Add(quiz);
@@ -102,7 +104,11 @@ namespace CourseWork2019.Controllers
 
             questions.ForEach(w => w.Answers?.ToList().ForEach(r => r.IsCorrectAnswer = false));
 
-            return View(new QuizDetailsModel(new Quiz(), questions));
+            Quiz quiz = new Quiz();
+            Rubric rubric = await _context.Rubrics.FirstOrDefaultAsync(w => w.RubricID == id);
+            quiz.QuizName = rubric.RubricName;
+
+            return View(new QuizDetailsModel(quiz, questions));
         }
 
         // POST: Quizzes/PassRubric
@@ -127,16 +133,6 @@ namespace CourseWork2019.Controllers
                     }
                 }
             }
-
-            User user = await _context.Users.FirstOrDefaultAsync(w => w.UserName == HttpContext.User.Identity.Name);
-            Counter counter = new Counter
-            {
-                Message = $"pass: {correct} {total}",
-                User = user,
-                UserID = user.UserID
-            };
-            _context.Counters.Add(counter);
-            await _context.SaveChangesAsync();
 
             ViewBag.TotalQuestions = total;
             ViewBag.CorrectQuestions = correct;
@@ -163,7 +159,7 @@ namespace CourseWork2019.Controllers
         // POST: Quizzes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("QuizID,QuizName,CreationDate")] Quiz quiz)
+        public async Task<IActionResult> Edit(int id, [Bind("QuizID,QuizName")] Quiz quiz)
         {
             if (id != quiz.QuizID)
             {
@@ -269,17 +265,7 @@ namespace CourseWork2019.Controllers
                     }
                 }
             }
-
-            User user = await _context.Users.FirstOrDefaultAsync(w => w.UserName == HttpContext.User.Identity.Name);
-            Counter counter = new Counter
-            {
-                Message = $"pass: {correct} {total}",
-                User = user,
-                UserID = user.UserID
-            };
-            _context.Counters.Add(counter);
-            await _context.SaveChangesAsync();
-
+            
             ViewBag.TotalQuestions = total;
             ViewBag.CorrectQuestions = correct;
 

@@ -1,17 +1,22 @@
 ﻿@model CourseWork2019.ViewModels.QuizDetailsModel
 
 @{
-    ViewData["Title"] = "Pass";
+    ViewData["Title"] = "Прохождение викторины";
     List<Answer> answers = new List<Answer>();
 }
 
-<h1>Pass</h1>
+<h1>@Model.Quiz.QuizName</h1>
 
 <div>
     <hr />
     <form asp-action="Pass">
         <div class="form-group">
-            @foreach(var i in Model.Questions)
+            <style>
+                li {
+                    list-style-type: none; /* Убираем маркеры */
+                }
+            </style>
+            @foreach (var i in Model.Questions)
             {
                 <h3>@i.QuestionName</h3>
                 <p>@i.QuestionText</p>

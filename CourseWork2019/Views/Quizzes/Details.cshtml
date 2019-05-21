@@ -1,12 +1,12 @@
 ﻿@model CourseWork2019.ViewModels.QuizDetailsModel
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробнее о викторине";
 }
 
-<h1>Details</h1>
+<h1>Подробнее о викторине</h1>
 
 <div>
-    <h4>Quiz</h4>
+    <h4>Викторина</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -23,7 +23,7 @@
         </dd>
     </dl>
 
-    <h5>Questions: </h5>
+    <h5>Вопросы: </h5>
     <table class="table-striped">
         <thead>
             <tr>
@@ -41,6 +41,6 @@
     </table>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Quiz.QuizID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Quiz.QuizID">Редактировать</a> |
+    <a asp-action="Index">Вернуться к списку</a>
 </div>

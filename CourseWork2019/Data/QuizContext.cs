@@ -22,7 +22,6 @@ namespace CourseWork2019.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UserQuiz> UserQuizzes { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Counter> Counters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

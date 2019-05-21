@@ -1,14 +1,19 @@
 ﻿@model IEnumerable<CourseWork2019.Models.Quiz>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Список викторин";
 }
 
-<h1>Index</h1>
+<h1>Список викторин</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("admin"))
+{
+    <p>
+        <a asp-action="Create">Создать новую</a>
+    </p>
+
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -32,10 +37,15 @@
                     @Html.DisplayFor(modelItem => item.CreationDate)
                 </td>
                 <td>
-                    <a asp-action="Pass" asp-route-id="@item.QuizID">Pass</a> |
-                    <a asp-action="Edit" asp-route-id="@item.QuizID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.QuizID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.QuizID">Delete</a>
+                    <a asp-action="Pass" asp-route-id="@item.QuizID">Пройти викторину</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <span>
+                            | <a asp-action="Edit" asp-route-id="@item.QuizID">Редактировать</a> |
+                            <a asp-action="Details" asp-route-id="@item.QuizID">Подробнее</a> |
+                            <a asp-action="Delete" asp-route-id="@item.QuizID">Удалить</a>
+                        </span>
+                    }
                 </td>
             </tr>
         }

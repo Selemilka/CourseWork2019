@@ -8,6 +8,7 @@ using CourseWork2019.Models;
 using CourseWork2019.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +47,7 @@ namespace CourseWork2019.Controllers
                 {
                     await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Quizzes");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
@@ -78,12 +79,19 @@ namespace CourseWork2019.Controllers
                     return View(model);
                 }
                 // добавляем пользователя в бд
+
+                Role role;
+                if (_context.Users.Count() == 0)
+                    role = await _context.Roles.FirstOrDefaultAsync(u => u.Name == "admin");
+                else
+                    role = await _context.Roles.FirstOrDefaultAsync(u => u.Name == "user");
+
                 user = new User
                 {
                     EmailAddress = model.EmailAddress,
                     Password = model.Password,
                     UserName = model.UserName,
-                    Role = await _context.Roles.FirstOrDefaultAsync(u => u.Name == "user")
+                    Role = role
                 };
 
                 _context.Users.Add(user);
@@ -91,7 +99,7 @@ namespace CourseWork2019.Controllers
 
                 await Authenticate(user); // аутентификация
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Quizzes");
             }
             else
             {
@@ -100,6 +108,24 @@ namespace CourseWork2019.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> List()
+        {
+            List<User> Users = await _context.Users.Include(w => w.Role).ToListAsync();
+            Users.ForEach(w => w.Password = "");
+            return View(Users);
+        }
+        
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "admin")]
+        public async Task<IActionResult> Admin(int? id)
+        {
+            var user = await _context.Users.Include(w => w.Role).FirstOrDefaultAsync(w => w.UserID == id);
+            if (user == null) return NotFound();
+            user.Role = await _context.Roles.FirstOrDefaultAsync(w => w.Name == "admin");
+            _context.Update(user);
+            _context.SaveChanges();
+            return View();
+        }
 
         private async Task Authenticate(User user)
         {

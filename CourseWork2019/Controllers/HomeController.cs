@@ -14,6 +14,7 @@ namespace CourseWork2019.Controllers
         [Authorize(Roles = "admin, user")]
         public IActionResult Index()
         {
+
             return View();
         }
 
@@ -21,7 +22,7 @@ namespace CourseWork2019.Controllers
         {
             return View();
         }
-
+            
         public IActionResult Denied()
         {
             return View();

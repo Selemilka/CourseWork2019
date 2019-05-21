@@ -2,10 +2,10 @@
 
 @{
     ViewData["Title"] = "Result";
-    string Percent = Model.TotalQuestions > 0 ? (Model.CorrectQuestions / Model.TotalQuestions * 100).ToString("F2") + "%": "Не было вопросов";
+    string Percent = Model.TotalQuestions > 0 ? ((double)(Model.CorrectQuestions) / Model.TotalQuestions * 100).ToString("F2") + "%": "Не было вопросов";
 }
 
-<h1>Result</h1>
+<h1>Результат</h1>
 
 <div>
     <p>Ваш результат: @ViewBag.CorrectQuestions из @ViewBag.TotalQuestions</p>

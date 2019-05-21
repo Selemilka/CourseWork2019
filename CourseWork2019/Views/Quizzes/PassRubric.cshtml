@@ -1,11 +1,11 @@
 ﻿@model CourseWork2019.ViewModels.QuizDetailsModel
 
 @{
-    ViewData["Title"] = "PassRubric";
+    ViewData["Title"] = "Прохождение викторины по рубрике";
     List<Answer> answers = new List<Answer>();
 }
 
-<h1>PassRubric</h1>
+<h1>@Model.Quiz.QuizName</h1>
 
 <div>
     <hr />
