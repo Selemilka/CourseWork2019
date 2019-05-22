@@ -132,6 +132,7 @@ namespace CourseWork2019.Controllers
         //GET: Questions/AddAnswer/5
         public IActionResult AddAnswer(int? id)
         {
+            if (id == null) return NotFound();
             ViewBag.ID = id;
             return View();
         }

@@ -10,7 +10,9 @@ namespace CourseWork2019.Models
     {
         [Display(Name = "ID вопроса")]
         public int QuizQuestionID { get; set; }
+        [Display(Name = "ID викторины")]
         public int QuizID { get; set; }
+        [Display(Name = "ID вопроса")]
         public int QuestionID { get; set; }
 
         public Quiz Quiz { get; set; }

@@ -53,6 +53,7 @@ namespace CourseWork2019.Controllers
         //GET: Quizzes/AddQuestion/5
         public IActionResult AddQuestion(int? id)
         {
+            if (id == null) return NotFound();
             ViewBag.ID = id;
             return View();
         }
@@ -96,11 +97,14 @@ namespace CourseWork2019.Controllers
         // GET: Quizzes/PassRubric
         public async Task<IActionResult> PassRubric(int? id)
         {
+            if (id == null) return NotFound();
             List<Question> questions = await _context.Questions
                                             .Where(w => w.RubricID == id)
                                                     .Include(w => w.Rubric)
                                                     .Include(w => w.Answers)
                                             .ToListAsync();
+
+            if (!questions.Any()) return NotFound();
 
             questions.ForEach(w => w.Answers?.ToList().ForEach(r => r.IsCorrectAnswer = false));
 
@@ -116,10 +120,12 @@ namespace CourseWork2019.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PassRubric(int? id, List<Answer> answers)
         {
+            if (id == null) return NotFound();
             List<Question> questions = await _context.Questions
                                                        .Where(w => w.RubricID == id)
                                                            .Include(w => w.Answers)
                                                        .ToListAsync();
+            if (!questions.Any()) return NotFound();
             int total = questions.Count();
             int correct = total;
             foreach (var i in questions)
@@ -227,13 +233,17 @@ namespace CourseWork2019.Controllers
 
             var quiz = await _context.Quizzes.FirstOrDefaultAsync(m => m.QuizID == id);
 
+            if (quiz == null) return NotFound();
+
             var questions = await _context.QuizQuestions
                                     .Where(q => q.QuizID == id)
                                     .Select(m => m.Question)
                                         .Include(w => w.Answers)
                                     .OrderBy(w => w.QuestionID)
                                     .ToListAsync();
-            
+
+            if (!questions.Any()) return NotFound();
+
             questions.ForEach(w => w.Answers?.ToList().ForEach(r => r.IsCorrectAnswer = false));
 
             return View(new QuizDetailsModel(quiz, questions));
