@@ -115,8 +115,8 @@ namespace CourseWork2019.Controllers
             return View(Users);
         }
         
-        //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "admin")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Admin(int? id)
         {
             var user = await _context.Users.Include(w => w.Role).FirstOrDefaultAsync(w => w.UserID == id);

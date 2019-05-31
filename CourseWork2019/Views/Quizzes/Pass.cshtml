@@ -1,8 +1,11 @@
 ﻿@model CourseWork2019.ViewModels.QuizDetailsModel
 
+@using CourseWork2019.ViewModels
+
 @{
     ViewData["Title"] = "Прохождение викторины";
     List<Answer> answers = new List<Answer>();
+    QuizDetailsModel qdm = new QuizDetailsModel(null, null);
 }
 
 <h1>@Model.Quiz.QuizName</h1>
